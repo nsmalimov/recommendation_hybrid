@@ -80,8 +80,6 @@ def main():
 
     array_rating = open_file_users_small("BX-Book-Ratings.csv")
 
-    #print array_rating
-
     array_users_all = open_file_users("BX-Users.csv")
 
     print array_users_all
@@ -91,7 +89,6 @@ def main():
     dict_rate = rating_dict_create(array_rating)
 
     #кластеризуем по 4 параметрам
-
     predict_array, actual_array = use_clastering(array_users_all, dict_rate)
 
     rmsd = metrics.root_mean_square_deviation(predict_array, actual_array)
@@ -106,18 +103,3 @@ def main():
     print t
 
 main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
