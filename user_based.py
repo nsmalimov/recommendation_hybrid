@@ -96,7 +96,7 @@ def user_based(array_users_all, dict_rate):
                 city = i_place_split[0]
                 state = i_place_split[1]
                 country = i_place_split[2]
-
+                
             try:
                 array_users_all_dict[i[0]] = [len(city), len(state), len(country), int(i[2])]
             except:
@@ -169,12 +169,6 @@ def user_based_cold(array_users_all, dict_rate, user, book):
         else:
             average_rate[i] = sum(array_rate) / float(len(array_rate))
 
-    #по юзерам
-    #inner_dict = dict_rate[user]
-        #по книгам для каждого пользователя
-    #for j in inner_dict:
-    #    asses = inner_dict[j]
-    #    actual_array.append(asses)
     predict_answer = predict_user_based(user, book, dict_rate, average_rate, array_users_all, array_users_all_dict)
 
     print predict_answer
@@ -229,14 +223,3 @@ def main():
 
     t = finish - start
     print t
-
-
-
-
-
-
-
-
-
-
-
