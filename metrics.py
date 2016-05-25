@@ -9,7 +9,6 @@ def root_mean_square_deviation(predict_array, actual_array):
     for i in xrange(len(predict_array)):
         if (predict_array[i] != 0):
             diference_array.append((predict_array[i] - actual_array[i]) ** 2)
-    #print diference_array
     answer = math.sqrt(sum(diference_array) / float(len(diference_array)))
     return answer
 
