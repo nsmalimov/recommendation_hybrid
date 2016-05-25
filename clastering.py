@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from sklearn import cluster
 
-
 def make_clast(array_users_all, dict_rate):
     dict_users_clasters = {}
 
@@ -34,12 +33,37 @@ def make_clast(array_users_all, dict_rate):
 
     num_clusters = len(X_array) / 50
 
-    k_means = cluster.KMeans(n_clusters=num_clusters)
+    k_means = cluster.KMeans(n_clusters = num_clusters)
+    #print X_array
     k_means.fit(X_array)
-    # номер показывает номер кластера
+    #номер показывает номер кластера
     clusterized_array = list(k_means.labels_)
 
     for index, i in enumerate(dict_users_clasters.keys()):
         dict_users_clasters[i] = clusterized_array[index]
 
     return dict_users_clasters
+
+def make_clast_books(dict_books_all, array_books_real):
+
+    dict_books_clasters = {}
+
+    for i in array_books_real:
+        try:
+            dict_books_clasters[i] = dict_books_all[i]
+        except:
+            dict_books_clasters[i] = [1, 1, 1, 1]
+
+    X_array = dict_books_clasters.values()
+
+    num_clusters = len(X_array) / 50
+
+    k_means = cluster.KMeans(n_clusters = num_clusters)
+    k_means.fit(X_array)
+    #номер показывает номер кластера
+    clusterized_array = list(k_means.labels_)
+
+    for index, i in enumerate(dict_books_clasters.keys()):
+        dict_books_clasters[i] = clusterized_array[index]
+
+    return dict_books_clasters, num_clusters
