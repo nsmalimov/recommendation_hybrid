@@ -30,8 +30,6 @@ def open_file_books(file_name):
         except:
             dict_books_all[i[0]] = [len(city), len(state), len(country), 0]
 
-        #print len(dict_books_all[i[0]])
-
     return dict_books_all
 
 def open_file_users_small(file_name):
@@ -59,10 +57,7 @@ def predict_item_based(user_id, book_id, dict_rate, average_rate, array_users_al
     new_dict = data_books.copy()
     del new_dict[book_id]
 
-    #print len(new_dict)
-    #count = 0
     for i in new_dict.keys():
-        #print count
         try:
             s = dict_rate[user_id][i]
         except:
@@ -94,7 +89,6 @@ def item_based(array_users_all, dict_rate, array_books, dict_books_all, array_bo
             #элемент не найден
             data_books[i] = [1, 1, 1, 1]
 
-    #average_rate = data_books.copy()
     average_rate = {}
     for i in data_books:
         average_rate[i] = []
@@ -111,7 +105,6 @@ def item_based(array_users_all, dict_rate, array_books, dict_books_all, array_bo
     predict_answer = 0
     #по юзерам
     count = 0
-    #print len(dict_rate)
     for i in dict_rate:
         inner_dict = dict_rate[i]
         #по книгам для кажого пользователя
@@ -122,7 +115,6 @@ def item_based(array_users_all, dict_rate, array_books, dict_books_all, array_bo
             predict_answer = predict_item_based(i, j, dict_rate, average_rate, array_users_all, data_books)
             predict_array.append(predict_answer)
         count += 1
-        #print count
     return predict_array, actual_array
 
 def item_based_cold(array_users_all, dict_rate, array_books, dict_books_all, array_books_real, user, book):
@@ -139,7 +131,6 @@ def item_based_cold(array_users_all, dict_rate, array_books, dict_books_all, arr
             #элемент не найден
             data_books[i] = [1, 1, 1, 1]
 
-    #average_rate = data_books.copy()
     average_rate = {}
     for i in data_books:
         average_rate[i] = []
@@ -154,14 +145,11 @@ def item_based_cold(array_users_all, dict_rate, array_books, dict_books_all, arr
             average_rate[i] = 0
         else:
             average_rate[i] = sum(average_rate[i]) / float(len(average_rate[i]))
-        #average_rate[i] = sum(average_rate[i]) / float(len(average_rate[i]))
 
     predict_answer = 0
     #по юзерам
-    #actual_array.append(assess)
     predict_answer = predict_item_based(user, book, dict_rate, average_rate, array_users_all, data_books)
     predict_array.append(predict_answer)
-        #print count
     return predict_array, actual_array
 
 def pearsonr_func(x_array, y_array):
@@ -246,5 +234,5 @@ def main():
 
     t = finish - start
     print t
-
-#main()
+    
+main()
