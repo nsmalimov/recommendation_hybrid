@@ -164,4 +164,3 @@ def main():
 
     t = finish - start
     print t
-
