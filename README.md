@@ -7,4 +7,4 @@ Exist alghorithms:
 
 Has been offered new: hybrid approach.
 
-More info see in http://cpsconf.ru/news/. Artical name "Hybrid approach in reccomendation systems". Control Processes and Stability (CPS'15).
+More info see in http://cpsconf.ru. Artical name "Hybrid approach in reccomendation systems". Control Processes and Stability (CPS'15).
