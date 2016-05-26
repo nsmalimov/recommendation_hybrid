@@ -51,7 +51,6 @@ print len(array_books_real)
 
 start = time.time()
 
-# actual_array_1 = actual_array_2
 predict_array_1, actual_array_1 = item_based.item_based(array_users_all, dict_rate, array_books, dict_books_all,
                                                         array_books_real)
 print len(predict_array_1)
