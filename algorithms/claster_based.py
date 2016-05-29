@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 import csv
-import clastering
-import metrics
 import time
 
+import clastering
+import metrics
+
+
 def open_file_users_small(file_name):
-    array_file =[]
+    array_file = []
     restr = 10000
     f = open(file_name)
     reader = csv.reader(f, delimiter=';')
@@ -16,13 +18,15 @@ def open_file_users_small(file_name):
             array_file.append(i)
     return array_file
 
+
 def open_file_users(file_name):
-    array_file =[]
+    array_file = []
     f = open(file_name)
     reader = csv.reader(f, delimiter=';')
     for i in reader:
         array_file.append(i)
     return array_file
+
 
 def wich_users(array_rating):
     users = []
@@ -30,17 +34,19 @@ def wich_users(array_rating):
         users.append(i[0])
     return list(set(users))
 
+
 def rating_dict_create(array_rating):
     dict_rate = {}
 
     for i in array_rating:
         if (int(i[2]) != 0):
             try:
-                dict_rate[i[0]].update({i[1]:int(i[2])})
+                dict_rate[i[0]].update({i[1]: int(i[2])})
             except:
-                dict_rate[i[0]] = {i[1]:int(i[2])}
+                dict_rate[i[0]] = {i[1]: int(i[2])}
 
     return dict_rate
+
 
 def use_clastering(array_users_all, dict_rate):
     dict_users_clasters = clastering.make_clast(array_users_all, dict_rate)
@@ -71,6 +77,7 @@ def use_clastering(array_users_all, dict_rate):
 
     return predict_array, actual_array
 
+
 def main():
     start = time.time()
 
@@ -88,7 +95,7 @@ def main():
 
     dict_rate = rating_dict_create(array_rating)
 
-    #кластеризуем по 4 параметрам
+    # кластеризуем по 4 параметрам
     predict_array, actual_array = use_clastering(array_users_all, dict_rate)
 
     rmsd = metrics.root_mean_square_deviation(predict_array, actual_array)
@@ -102,4 +109,6 @@ def main():
 
     print t
 
-main()
+
+if __name__ == "__main__":
+    main()

@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 import csv
-import metrics
 import math
 import time
 
+import metrics
+
+
 def open_file_users_small(file_name):
-    array_file =[]
+    array_file = []
     restr = 10000
     f = open(file_name)
     reader = csv.reader(f, delimiter=';')
@@ -16,13 +18,15 @@ def open_file_users_small(file_name):
             array_file.append(i)
     return array_file
 
+
 def open_file_users(file_name):
-    array_file =[]
+    array_file = []
     f = open(file_name)
     reader = csv.reader(f, delimiter=';')
     for i in reader:
         array_file.append(i)
     return array_file
+
 
 def wich_users(array_rating):
     users = []
@@ -30,17 +34,19 @@ def wich_users(array_rating):
         users.append(i[0])
     return list(set(users))
 
+
 def rating_dict_create(array_rating):
     dict_rate = {}
 
     for i in array_rating:
         if (int(i[2]) != 0):
             try:
-                dict_rate[i[0]].update({i[1]:int(i[2])})
+                dict_rate[i[0]].update({i[1]: int(i[2])})
             except:
-                dict_rate[i[0]] = {i[1]:int(i[2])}
+                dict_rate[i[0]] = {i[1]: int(i[2])}
 
     return dict_rate
+
 
 def predict_user_based(user_id, book_id, dict_rate, average_rate, array_users_all, array_users_all_dict):
     predict_answer = 0
@@ -55,7 +61,7 @@ def predict_user_based(user_id, book_id, dict_rate, average_rate, array_users_al
         try:
             s = dict_rate[i][book_id]
         except:
-            #если пользователь не оценивал эту книгу то передаём 0
+            # если пользователь не оценивал эту книгу то передаём 0
             sum_up += 0
             sum_down += 0
             continue
@@ -64,15 +70,17 @@ def predict_user_based(user_id, book_id, dict_rate, average_rate, array_users_al
         sum_down += get_similarity(user_id, i, array_users_all_dict)
 
     if (sum_down != 0):
-        predict_answer += (average_rate[user_id] + sum_up/sum_down)
+        predict_answer += (average_rate[user_id] + sum_up / sum_down)
     else:
         predict_answer += average_rate[user_id]
 
     return predict_answer
 
+
 def get_similarity(array_id_1, array_id_2, array_users_all_dict):
     sim = euclidean_dist(array_users_all_dict[array_id_1], array_users_all_dict[array_id_2])
     return sim
+
 
 def user_based(array_users_all, dict_rate):
     array_users_all_dict = {}
@@ -96,7 +104,7 @@ def user_based(array_users_all, dict_rate):
                 city = i_place_split[0]
                 state = i_place_split[1]
                 country = i_place_split[2]
-                
+
             try:
                 array_users_all_dict[i[0]] = [len(city), len(state), len(country), int(i[2])]
             except:
@@ -107,15 +115,15 @@ def user_based(array_users_all, dict_rate):
 
     average_rate = {}
 
-    #массив со средним оценок каждого пользователя
+    # массив со средним оценок каждого пользователя
     for i in users_array:
         array_rate = dict_rate[i].values()
         average_rate[i] = sum(array_rate) / float(len(array_rate))
 
-    #по юзерам
+    # по юзерам
     for i in dict_rate:
         inner_dict = dict_rate[i]
-        #по книгам для каждого пользователя
+        # по книгам для каждого пользователя
         for j in inner_dict:
             asses = inner_dict[j]
             actual_array.append(asses)
@@ -127,6 +135,7 @@ def user_based(array_users_all, dict_rate):
             predict_array.append(predict_answer)
 
     return predict_array, actual_array
+
 
 def user_based_cold(array_users_all, dict_rate, user, book):
     array_users_all_dict = {}
@@ -161,7 +170,7 @@ def user_based_cold(array_users_all, dict_rate, user, book):
 
     average_rate = {}
 
-    #массив со средним оценок каждого пользователя
+    # массив со средним оценок каждого пользователя
     for i in users_array:
         array_rate = dict_rate[i].values()
         if (len(array_rate) == 0):
@@ -185,11 +194,13 @@ def user_based_cold(array_users_all, dict_rate, user, book):
 def pearsonr_func(x_array, y_array):
     pass
 
+
 def euclidean_dist(x_array, y_array):
     sum = 0
     for i in xrange(len(x_array)):
         sum += (x_array[i] - y_array[i]) ** 2
     return math.sqrt(sum)
+
 
 def main():
     start = time.time()
@@ -208,8 +219,7 @@ def main():
 
     array_users_real = dict_rate.keys()
 
-    #print len(dict_rate)
-    #кластеризуем по 4 параметрам
+    # кластеризуем по 4 параметрам
 
     predict_array, actual_array = user_based(array_users_all, dict_rate)
 
@@ -223,3 +233,7 @@ def main():
 
     t = finish - start
     print t
+
+
+if __name__ == "__main__":
+    main()

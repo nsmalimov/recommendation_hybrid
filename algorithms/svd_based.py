@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
-import numpy as np
 import csv
-import metrics
 import time
+
+import numpy as np
+
+import metrics
+
 
 def svd_used(rate_array):
     R = np.array(rate_array)
 
-    U, s, V = np.linalg.svd(R, full_matrices = False)
+    U, s, V = np.linalg.svd(R, full_matrices=False)
 
     slice = 20
 
@@ -27,20 +30,22 @@ def svd_used(rate_array):
 
     return U, V
 
+
 def rating_dict_create(array_rating):
     dict_rate = {}
 
     for i in array_rating:
         if (int(i[2]) != 0):
             try:
-                dict_rate[i[0]].update({i[1]:int(i[2])})
+                dict_rate[i[0]].update({i[1]: int(i[2])})
             except:
-                dict_rate[i[0]] = {i[1]:int(i[2])}
+                dict_rate[i[0]] = {i[1]: int(i[2])}
 
     return dict_rate
 
+
 def open_file_users_small(file_name):
-    array_file =[]
+    array_file = []
     restr = 10000
     f = open(file_name)
     reader = csv.reader(f, delimiter=';')
@@ -51,11 +56,13 @@ def open_file_users_small(file_name):
             array_file.append(i)
     return array_file
 
+
 def wich_users(array_rating):
     users = []
     for i in array_rating:
         users.append(i[0])
     return list(set(users))
+
 
 def wich_books(dict_rate):
     books = []
@@ -63,6 +70,7 @@ def wich_books(dict_rate):
         for j in dict_rate[i].keys():
             books.append(j)
     return list(set(books))
+
 
 def rating_array_create(dict_rate, array_books):
     array_rating = []
@@ -83,14 +91,15 @@ def rating_array_create(dict_rate, array_books):
         help_array = array_rating[index]
         for index1, j in enumerate(help_array):
             try:
-              s = dict_rate[i][j]
-              array_rating[index][index1] = s
+                s = dict_rate[i][j]
+                array_rating[index][index1] = s
             except:
-              array_rating[index][index1] = 0
+                array_rating[index][index1] = 0
         dict_rating_new[i] = array_rating
         index += 1
 
     return array_rating, dict_rating_new
+
 
 def predict_svd_based(user_id, item_id, U, V, rate_dict, array_books):
     num_user = rate_dict.keys().index(user_id)
@@ -100,14 +109,15 @@ def predict_svd_based(user_id, item_id, U, V, rate_dict, array_books):
 
     return predict_answer
 
+
 def svd_based(dict_rate, rate_dict, U, V, array_books):
     predict_array = []
     actual_array = []
 
-    #по юзерам
+    # по юзерам
     for i in dict_rate:
         inner_dict = dict_rate[i]
-        #по книгам для кажого пользователя
+        # по книгам для кажого пользователя
         for j in inner_dict:
             asses = inner_dict[j]
             actual_array.append(asses)
@@ -124,6 +134,7 @@ def svd_based(dict_rate, rate_dict, U, V, array_books):
 
     return predict_array, actual_array
 
+
 def get_average_r(dict_rate):
     rate_array = []
 
@@ -135,6 +146,7 @@ def get_average_r(dict_rate):
     average_r = sum(rate_array) / float(len(rate_array))
 
     return average_r
+
 
 def main():
     start = time.time()
@@ -164,3 +176,7 @@ def main():
 
     t = finish - start
     print t
+
+
+if __name__ == "__main__":
+    main()

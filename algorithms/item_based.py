@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 import csv
-import metrics
 import math
 import time
+
+import metrics
+
 
 def open_file_books(file_name):
     dict_books_all = {}
@@ -32,8 +34,9 @@ def open_file_books(file_name):
 
     return dict_books_all
 
+
 def open_file_users_small(file_name):
-    array_file =[]
+    array_file = []
     restr = 10000
     f = open(file_name)
     reader = csv.reader(f, delimiter=';')
@@ -44,9 +47,11 @@ def open_file_users_small(file_name):
             array_file.append(i)
     return array_file
 
+
 def get_similarity(array_id_1, array_id_2, array_users_all_dict):
     sim = euclidean_dist(array_users_all_dict[array_id_1], array_users_all_dict[array_id_2])
     return sim
+
 
 def predict_item_based(user_id, book_id, dict_rate, average_rate, array_users_all, data_books):
     predict_answer = 0
@@ -61,7 +66,7 @@ def predict_item_based(user_id, book_id, dict_rate, average_rate, array_users_al
         try:
             s = dict_rate[user_id][i]
         except:
-            #если пользователь не оценивал эту книгу то передаём 0
+            # если пользователь не оценивал эту книгу то передаём 0
             sum_up += 0
             sum_down += 0
             continue
@@ -70,10 +75,11 @@ def predict_item_based(user_id, book_id, dict_rate, average_rate, array_users_al
         sum_down += get_similarity(i, book_id, data_books)
 
     if (sum_down != 0):
-        predict_answer += (average_rate[book_id] + sum_up/sum_down)
+        predict_answer += (average_rate[book_id] + sum_up / sum_down)
     else:
         predict_answer += average_rate[book_id]
     return predict_answer
+
 
 def item_based(array_users_all, dict_rate, array_books, dict_books_all, array_books_real):
     predict_array = []
@@ -85,8 +91,8 @@ def item_based(array_users_all, dict_rate, array_books, dict_books_all, array_bo
         try:
             data_books[i] = dict_books_all[i]
         except:
-            #атрибуты по умолчанию
-            #элемент не найден
+            # атрибуты по умолчанию
+            # элемент не найден
             data_books[i] = [1, 1, 1, 1]
 
     average_rate = {}
@@ -99,23 +105,22 @@ def item_based(array_users_all, dict_rate, array_books, dict_books_all, array_bo
             average_rate[j].append(array_dict[j])
 
     for i in average_rate:
-        #print i
         average_rate[i] = sum(average_rate[i]) / float(len(average_rate[i]))
 
     predict_answer = 0
-    #по юзерам
+    # по юзерам
     count = 0
     for i in dict_rate:
         inner_dict = dict_rate[i]
-        #по книгам для кажого пользователя
+        # по книгам для кажого пользователя
         for j in inner_dict:
-
             assess = inner_dict[j]
             actual_array.append(assess)
             predict_answer = predict_item_based(i, j, dict_rate, average_rate, array_users_all, data_books)
             predict_array.append(predict_answer)
         count += 1
     return predict_array, actual_array
+
 
 def item_based_cold(array_users_all, dict_rate, array_books, dict_books_all, array_books_real, user, book):
     predict_array = []
@@ -127,8 +132,8 @@ def item_based_cold(array_users_all, dict_rate, array_books, dict_books_all, arr
         try:
             data_books[i] = dict_books_all[i]
         except:
-            #атрибуты по умолчанию
-            #элемент не найден
+            # атрибуты по умолчанию
+            # элемент не найден
             data_books[i] = [1, 1, 1, 1]
 
     average_rate = {}
@@ -147,13 +152,15 @@ def item_based_cold(array_users_all, dict_rate, array_books, dict_books_all, arr
             average_rate[i] = sum(average_rate[i]) / float(len(average_rate[i]))
 
     predict_answer = 0
-    #по юзерам
+    # по юзерам
     predict_answer = predict_item_based(user, book, dict_rate, average_rate, array_users_all, data_books)
     predict_array.append(predict_answer)
     return predict_array, actual_array
 
+
 def pearsonr_func(x_array, y_array):
     pass
+
 
 def euclidean_dist(x_array, y_array):
     sum = 0
@@ -161,17 +168,19 @@ def euclidean_dist(x_array, y_array):
         sum += (x_array[i] - y_array[i]) ** 2
     return math.sqrt(sum)
 
+
 def rating_dict_create(array_rating):
     dict_rate = {}
 
     for i in array_rating:
         if (int(i[2]) != 0):
             try:
-                dict_rate[i[0]].update({i[1]:int(i[2])})
+                dict_rate[i[0]].update({i[1]: int(i[2])})
             except:
-                dict_rate[i[0]] = {i[1]:int(i[2])}
+                dict_rate[i[0]] = {i[1]: int(i[2])}
 
     return dict_rate
+
 
 def wich_books(array_rating):
     books = []
@@ -179,14 +188,16 @@ def wich_books(array_rating):
         books.append(i[1])
     return list(set(books))
 
+
 def wich_users(array_rating):
     users = []
     for i in array_rating:
         users.append(i[0])
     return list(set(users))
 
+
 def open_file_users(file_name):
-    array_file =[]
+    array_file = []
     f = open(file_name)
     reader = csv.reader(f, delimiter=';')
     for i in reader:
@@ -200,6 +211,7 @@ def wich_books_new(dict_rate):
         for j in dict_rate[i].keys():
             books.append(j)
     return list(set(books))
+
 
 def main():
     start = time.time()
@@ -234,5 +246,7 @@ def main():
 
     t = finish - start
     print t
-    
-main()
+
+
+if __name__ == "__main__":
+    main()
